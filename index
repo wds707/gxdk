@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" 
+
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>明觉城·每日共修
+
+打卡</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-
+
+awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            
+
+box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #e6c48c; /* 佛经黄 */
+        
+
+    --secondary-color: #8b4513; /* 檀木棕 */
+            --accent-color: #d4a76a; /* 金箔色 */
+            --
+
+light-bg: #f9f5e9; /* 经卷米白 */
+            --dark-bg: #5d4037; /* 深褐 */
+            --text-color: #4e342e; /* 
+
+深棕 */
+            --light-text: #f5f5f5; /* 浅色文字 */
+            --success-color: #8bc34a; /* 莲花绿 */
+       
+
+     --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+  
+
+          font-family: "Microsoft YaHei", "SimHei", sans-serif;
+            background-color: var(--light-bg);
+    
+
+        color: var(--text-color);
+            line-height: 1.6;
+            background-image: url("data:image/svg
+
++xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 
+
+18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 
+
+3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3
+
+-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-
+
+1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-
+
+65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 
+
+5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 
+
+2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 
+
+2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895
+
+-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 
+
+2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23e6c48c' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg
+
+%3E");
+            padding: 10px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            
+
+max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* 顶部区域 */
+        .header {
+            
+
+text-align: center;
+            padding: 20px 15px;
+            background: linear-gradient(135deg, var(--
+
+secondary-color) 0%, var(--dark-bg) 100%);
+            color: var(--light-text);
+            border-radius: var
+
+(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: 
+
+relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "卍";
+       
+
+     position: absolute;
+            font-size: 120px;
+            opacity: 0.1;
+            top: 50%;
+            
+
+left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .header h1 {
+            font-
+
+size: 1.8rem;
+            margin-bottom: 8px;
+            position: relative;
+            letter-spacing: 2px;
+      
+
+  }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: 
+
+relative;
+        }
+        
+        .date-display {
+            font-size: 1.1rem;
+            margin-top: 10px;
+     
+
+       position: relative;
+            color: var(--accent-color);
+        }
+        
+        /* 打卡主区域 */
+       
+
+ .checkin-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            
+
+padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px 
+
+solid rgba(139, 69, 19, 0.1);
+        }
+        
+        .checkin-title {
+            display: flex;
+            
+
+align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 
+
+1px dashed var(--accent-color);
+        }
+        
+        .lotus-icon {
+            color: var(--primary-color);
+    
+
+        font-size: 1.8rem;
+            margin-right: 12px;
+        }
+        
+        .checkin-title h2 {
+            
+
+font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .practices-list {
+           
+
+ margin-bottom: 25px;
+        }
+        
+        .practice-item {
+            display: flex;
+            justify-
+
+content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 
+
+1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .practice-item:last-child {
+            border-bottom: 
+
+none;
+        }
+        
+        .practice-inputs {
+            display: flex;
+            flex: 1;
+            
+
+align-items: center;
+            gap: 10px;
+        }
+        
+        .practice-name {
+            flex: 2;
+          
+
+  padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 
+
+1rem;
+            background-color: #fafafa;
+        }
+        
+        .practice-amount {
+            flex: 1;
+       
+
+     padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 
+
+1rem;
+            background-color: #fafafa;
+            text-align: center;
+        }
+        
+        .practice-
+
+toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            flex-shrink: 
+
+0;
+        }
+        
+        .practice-toggle input {
+            opacity: 0;
+            width: 0;
+            
+
+height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+   
+
+         top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: 
+
+#ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before 
+
+{
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+        
+
+    left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+           
+
+ border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var
+
+(--success-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: 
+
+translateX(30px);
+        }
+        
+        .checkin-button {
+            display: block;
+            width: 100%;
+   
+
+         padding: 18px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-
+
+color));
+            color: var(--text-color);
+            border: none;
+            border-radius: var(--border-
+
+radius);
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            
+
+transition: all 0.3s;
+            margin-top: 10px;
+            letter-spacing: 3px;
+            box-shadow: 0 4px 
+
+8px rgba(139, 69, 19, 0.2);
+        }
+        
+        .checkin-button:hover, .checkin-button:active {
+            
+
+transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        
+
+.checkin-button.checked {
+            background: linear-gradient(to right, var(--success-color), #7cb342);
+       
+
+     color: white;
+        }
+        
+        /* 进度统计 */
+        .stats-card {
+            background-color: 
+
+white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 
+
+20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .stats-title {
+            display: flex;
+     
+
+       align-items: center;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+   
+
+     
+        .stats-icon {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            
+
+margin-right: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-
+
+columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+      
+
+      padding: 15px 10px;
+            background-color: var(--light-bg);
+            border-radius: 10px;
+        
+
+}
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var
+
+(--secondary-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 
+
+0.9rem;
+            color: #777;
+        }
+        
+        /* 今日法语 */
+        .dharma-card {
+            
+
+background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            
+
+margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            border-
+
+left: 5px solid var(--accent-color);
+        }
+        
+        .dharma-title {
+            color: var(--secondary-
+
+color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+       
+
+ 
+        .dharma-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+  
+
+      .dharma-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-
+
+color);
+            font-style: italic;
+            text-align: justify;
+        }
+        
+        .dharma-source {
+  
+
+          text-align: right;
+            margin-top: 10px;
+            color: #888;
+            font-size: 0.9rem;
+  
+
+      }
+        
+        /* 鼓励语提示 */
+        .encouragement-toast {
+            position: fixed;
+            
+
+bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            
+
+background-color: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            
+
+border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            
+
+opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .encouragement-toast.show {
+            
+
+opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* 底部 */
+        
+
+.footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 
+
+0.9rem;
+        }
+        
+        .sutra-link {
+            color: var(--secondary-color);
+            text-
+
+decoration: none;
+            border-bottom: 1px dotted var(--secondary-color);
+        }
+        
+        /* 响应式
+
+调整 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            
+
+}
+            
+            .checkin-card, .stats-card, .dharma-card {
+                padding: 20px 15px;
+           
+
+ }
+            
+            .practice-inputs {
+                flex-direction: column;
+                align-items: 
+
+stretch;
+                gap: 8px;
+            }
+            
+            .practice-name, .practice-amount {
+         
+
+       width: 100%;
+            }
+            
+            .practice-toggle {
+                align-self: flex-end;
+  
+
+          }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; 
+
+transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        
+
+.fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes pulse {
+            0% 
+
+{ transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+     
+
+   }
+        
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    
+
+<div class="container">
+        <!-- 顶部区域 -->
+        <header class="header">
+            <h1>明觉城·每日共修
+
+打卡</h1>
+            <p>精进修行 日积月累 功不唐捐</p>
+            <div class="date-display" 
+
+id="currentDate">2023年10月15日 星期六 农历九月初一</div>
+        </header>
+        
+        <!-- 打卡主区域 -->
+    
+
+    <main class="checkin-card fade-in">
+            <div class="checkin-title">
+                <i class="fas fa-
+
+spa lotus-icon"></i>
+                <h2>今日功课完成情况</h2>
+            </div>
+            
+            <div 
+
+class="practices-list" id="practicesList">
+                <!-- 10个可自定义的功课行将由JavaScript动态生成 -->
+    
+
+        </div>
+            
+            <button class="checkin-button" id="checkinBtn">
+                <i 
+
+class="fas fa-check-circle"></i> 完成今日共修
+            </button>
+        </main>
+        
+        <!-- 进度统计 
+
+-->
+        <section class="stats-card fade-in">
+            <div class="stats-title">
+                <i 
+
+class="fas fa-chart-line stats-icon"></i>
+                <h2>修行进度</h2>
+            </div>
+            
+         
+
+   <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" 
+
+id="currentStreak">0</div>
+                    <div class="stat-label">连续打卡</div>
+                </div>
+       
+
+         
+                <div class="stat-item">
+                    <div class="stat-value" 
+
+id="totalDays">0</div>
+                    <div class="stat-label">累计天数</div>
+                </div>
+           
+
+     
+                <div class="stat-item">
+                    <div class="stat-value" 
+
+id="todayParticipants">0</div>
+                    <div class="stat-label">今日共修</div>
+                </div>
+   
+
+             
+                <div class="stat-item">
+                    <div class="stat-value" 
+
+id="completionRate">0%</div>
+                    <div class="stat-label">完成率</div>
+                </div>
+       
+
+     </div>
+        </section>
+        
+        <!-- 今日法语 -->
+        <section class="dharma-card fade-in">
+      
+
+      <div class="dharma-title">
+                <i class="fas fa-quote-left dharma-icon"></i>
+                
+
+<h2>今日法语</h2>
+            </div>
+            <p class="dharma-text" id="dharmaText">一切有为法，如梦幻泡影，如
+
+露亦如电，应作如是观。</p>
+            <div class="dharma-source" id="dharmaSource">——《金刚经》</div>
+        
+
+</section>
+        
+        <!-- 底部 -->
+        <footer class="footer">
+            <p>愿以此功德 庄严佛净土 上报
+
+四重恩 下济三途苦</p>
+            <p>若有见闻者 悉发菩提心 尽此一报身 同生极乐国</p>
+            <p>明觉城共修打卡
+
+系统 · <a href="#" class="sutra-link">《回向文》</a></p>
+        </footer>
+        
+        <!-- 鼓励语提示 -->
+    
+
+    <div class="encouragement-toast" id="encouragementToast">
+            <span id="encouragementText">随喜赞叹！
+
+功德无量！</span>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const currentDateEl = 
+
+document.getElementById('currentDate');
+        const checkinBtn = document.getElementById('checkinBtn');
+        
+
+const practicesListEl = document.getElementById('practicesList');
+        const encouragementToast = 
+
+document.getElementById('encouragementToast');
+        const encouragementText = document.getElementById
+
+('encouragementText');
+        
+        // 统计元素
+        const currentStreakEl = document.getElementById
+
+('currentStreak');
+        const totalDaysEl = document.getElementById('totalDays');
+        const 
+
+todayParticipantsEl = document.getElementById('todayParticipants');
+        const completionRateEl = 
+
+document.getElementById('completionRate');
+        
+        // 法语元素
+        const dharmaTextEl = 
+
+document.getElementById('dharmaText');
+        const dharmaSourceEl = document.getElementById('dharmaSource');
+    
+
+    
+        // 初始化数据
+        let isCheckedIn = false;
+        let currentStreak = 0;
+        let totalDays = 
+
+0;
+        let todayParticipants = 0;
+        
+        // 默认功课数据（10行）
+        const defaultPractices = [
+    
+
+        { name: "金刚经", amount: "3部", checked: false },
+            { name: "地藏经", amount: "1部", checked: 
+
+false },
+            { name: "准提神咒", amount: "1080遍", checked: false },
+            { name: "念佛", amount: 
+
+"1000声", checked: false },
+            { name: "静坐", amount: "20分钟", checked: false },
+            { name: "
+
+行善", amount: "3次", checked: false },
+            { name: "拜佛", amount: "108拜", checked: false },
+            
+
+{ name: "诵咒", amount: "108遍", checked: false },
+            { name: "阅经", amount: "1卷", checked: false },
+   
+
+         { name: "放生", amount: "1次", checked: false }
+        ];
+        
+        // 鼓励语库
+        const 
+
+encouragementQuotes = [
+            "功德无量！随喜赞叹！",
+            "精进不懈，道业早成！",
+            "善哉善
+
+哉！福慧双增！",
+            "日日精进，早证菩提！",
+            "修行路上，感恩有您同行！",
+            "持之以恒
+
+，必得法益！",
+            "勇猛精进，功德圆满！",
+            "一念虔诚，一份功德！",
+            "修行无倦，福报
+
+无边！",
+            "精进修行，自利利他！"
+        ];
+        
+        // 今日法语库
+        const dharmaQuotes = [
+  
+
+          {
+                text: "一切有为法，如梦幻泡影，如露亦如电，应作如是观。",
+                source: "—
+
+—《金刚经》"
+            },
+            {
+                text: "色不异空，空不异色，色即是空，空即是色。",
+        
+
+        source: "——《心经》"
+            },
+            {
+                text: "若人散乱心，入于塔庙中，一称南无
+
+佛，皆共成佛道。",
+                source: "——《法华经》"
+            },
+            {
+                text: "念佛
+
+一声，福增无量；礼佛一拜，罪灭河沙。",
+                source: "——净土宗语录"
+            },
+            {
+        
+
+        text: "诸恶莫作，众善奉行，自净其意，是诸佛教。",
+                source: "——《法句经》"
+            },
+  
+
+          {
+                text: "人生在世如身处荆棘之中，心不动，人不妄动，不动则不伤。",
+                
+
+source: "——禅宗语录"
+            },
+            {
+                text: "过去心不可得，现在心不可得，未来心不可得
+
+。",
+                source: "——《金刚经》"
+            },
+            {
+                text: "凡所有相，皆是虚妄
+
+。若见诸相非相，即见如来。",
+                source: "——《金刚经》"
+            },
+            {
+                
+
+text: "是日已过，命亦随减，如少水鱼，斯有何乐？",
+                source: "——《法句经》"
+            },
+          
+
+  {
+                text: "愿我来世，得菩提时，身如琉璃，内外明澈，净无瑕秽。",
+                source: "——《药
+
+师琉璃光如来本愿功德经》"
+            }
+        ];
+        
+        // 初始化日期显示
+        function initDate() {
+   
+
+         const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', 
+
+weekday: 'long' };
+            const dateStr = now.toLocaleDateString('zh-CN', options);
+            
+            
+
+// 农历模拟（实际项目中可使用农历库）
+            const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', 
+
+'八', '九', '十', '冬', '腊'];
+            const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初
+
+七', '初八', '初九', '初十',
+                              '十一', '十二', '十三', '十四', '十五', '十六', '十
+
+七', '十八', '十九', '二十',
+                              '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿
+
+七', '廿八', '廿九', '三十'];
+            
+            const lunarMonth = lunarMonths[now.getMonth() % 12];
+        
+
+    const lunarDay = lunarDays[now.getDate() % 30];
+            
+            currentDateEl.textContent = `
+
+${dateStr} 农历${lunarMonth}月${lunarDay}`;
+        }
+        
+        // 初始化今日法语
+        function 
+
+initDharmaQuote() {
+            // 根据日期选择不同的法语，确保每天变化
+            const today = new Date();
+      
+
+      const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+         
+
+   const randomIndex = dayOfYear % dharmaQuotes.length;
+            
+            dharmaTextEl.textContent = 
+
+dharmaQuotes[randomIndex].text;
+            dharmaSourceEl.textContent = dharmaQuotes[randomIndex].source;
+        
+
+}
+        
+        // 初始化功课列表
+        function initPracticesList() {
+            practicesListEl.innerHTML = 
+
+'';
+            
+            // 从localStorage加载数据或使用默认数据
+            let practices = loadPracticesData
+
+();
+            
+            // 生成10个功课行
+            for (let i = 0; i < 10; i++) {
+                const 
+
+practice = practices[i] || { name: "", amount: "", checked: false };
+                
+                const 
+
+practiceItem = document.createElement('div');
+                practiceItem.className = 'practice-item fade-in';
+   
+
+             practiceItem.style.animationDelay = `${i * 0.05}s`;
+                
+                
+
+practiceItem.innerHTML = `
+                    <div class="practice-inputs">
+                        <input 
+
+type="text" class="practice-name" placeholder="功课名称" value="${practice.name}" data-index="${i}">
+             
+
+           <input type="text" class="practice-amount" placeholder="次数" value="${practice.amount}" data-
+
+index="${i}">
+                    </div>
+                    <label class="practice-toggle">
+                       
+
+ <input type="checkbox" class="practice-checkbox" ${practice.checked ? 'checked' : ''} data-index="${i}">
+        
+
+                <span class="toggle-slider"></span>
+                    </label>
+                `;
+                
+                practicesListEl.appendChild(practiceItem);
+            }
+            
+            // 添加输入框事件
+
+监听
+            const nameInputs = document.querySelectorAll('.practice-name');
+            const amountInputs = 
+
+document.querySelectorAll('.practice-amount');
+            const checkboxes = document.querySelectorAll
+
+('.practice-checkbox');
+            
+            nameInputs.forEach(input => {
+                
+
+input.addEventListener('input', savePracticesData);
+            });
+            
+            amountInputs.forEach
+
+(input => {
+                input.addEventListener('input', savePracticesData);
+            });
+            
+        
+
+    checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+             
+
+       savePracticesData();
+                    updateStatsDisplay();
+                    
+                    // 
+
+如果是从未选中变为选中，显示鼓励语
+                    if (this.checked) {
+                        
+
+showEncouragement();
+                    }
+                });
+            });
+        }
+        
+        // 从
+
+localStorage加载功课数据
+        function loadPracticesData() {
+            const savedData = 
+
+localStorage.getItem('buddhistPracticesData');
+            if (savedData) {
+                return JSON.parse
+
+(savedData);
+            }
+            return defaultPractices;
+        }
+        
+        // 保存功课数据到
+
+localStorage
+        function savePracticesData() {
+            const practices = [];
+            const nameInputs 
+
+= document.querySelectorAll('.practice-name');
+            const amountInputs = document.querySelectorAll
+
+('.practice-amount');
+            const checkboxes = document.querySelectorAll('.practice-checkbox');
+            
+            for (let i = 0; i < 10; i++) {
+                practices.push({
+                    name: nameInputs
+
+[i]?.value || "",
+                    amount: amountInputs[i]?.value || "",
+                    checked: 
+
+checkboxes[i]?.checked || false
+                });
+            }
+            
+            localStorage.setItem
+
+('buddhistPracticesData', JSON.stringify(practices));
+        }
+        
+        // 从localStorage加载统计数据
+      
+
+  function loadStatsData() {
+            const savedData = localStorage.getItem('buddhistStatsData');
+            
+
+if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                // 检查是否是
+
+同一天
+                const today = new Date().toDateString();
+                if (data.lastCheckinDate === 
+
+today) {
+                    isCheckedIn = data.isCheckedIn;
+                    currentStreak = 
+
+data.currentStreak || 0;
+                    totalDays = data.totalDays || 0;
+                    
+
+todayParticipants = data.todayParticipants || Math.floor(Math.random() * 20) + 15;
+                } else {
+       
+
+             // 新的一天，重置打卡状态
+                    isCheckedIn = false;
+                    
+               
+
+     // 如果是连续打卡，增加连续天数
+                    if (data.isCheckedIn) {
+                        
+
+currentStreak = (data.currentStreak || 0) + 1;
+                    } else {
+                        currentStreak 
+
+= 0;
+                    }
+                    
+                    totalDays = data.totalDays || 0;
+                
+
+    todayParticipants = Math.floor(Math.random() * 20) + 15;
+                    
+                    // 保存新数
+
+据
+                    saveStatsData();
+                }
+            } else {
+                // 初始数据
+           
+
+     currentStreak = 0;
+                totalDays = 0;
+                todayParticipants = Math.floor(Math.random
+
+() * 20) + 15;
+                saveStatsData();
+            }
+        }
+        
+        // 保存统计数据到
+
+localStorage
+        function saveStatsData() {
+            const today = new Date().toDateString();
+            
+
+const data = {
+                lastCheckinDate: today,
+                isCheckedIn: isCheckedIn,
+                
+
+currentStreak: currentStreak,
+                totalDays: totalDays,
+                todayParticipants: 
+
+todayParticipants
+            };
+            
+            localStorage.setItem('buddhistStatsData', JSON.stringify
+
+(data));
+        }
+        
+        // 更新统计显示
+        function updateStatsDisplay() {
+            const 
+
+practices = loadPracticesData();
+            const completedCount = practices.filter(p => p.checked).length;
+      
+
+      const totalCount = practices.filter(p => p.name.trim() !== "").length;
+            
+            
+
+currentStreakEl.textContent = currentStreak;
+            totalDaysEl.textContent = totalDays;
+            
+
+todayParticipantsEl.textContent = todayParticipants;
+            
+            // 计算完成率
+            const 
+
+completionRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            
+
+completionRateEl.textContent = `${completionRate}%`;
+        }
+        
+        // 更新打卡按钮状态
+        function 
+
+updateCheckinButton() {
+            if (isCheckedIn) {
+                checkinBtn.innerHTML = '<i class="fas fa-
+
+check-circle"></i> 今日已完成打卡';
+                checkinBtn.classList.add('checked');
+                
+
+checkinBtn.disabled = true;
+            } else {
+                checkinBtn.innerHTML = '<i class="fas fa-check-
+
+circle"></i> 完成今日共修';
+                checkinBtn.classList.remove('checked');
+                
+
+checkinBtn.disabled = false;
+            }
+        }
+        
+        // 显示鼓励语
+        function 
+
+showEncouragement() {
+            const randomIndex = Math.floor(Math.random() * encouragementQuotes.length);
+     
+
+       encouragementText.textContent = encouragementQuotes[randomIndex];
+            
+            
+
+encouragementToast.classList.add('show');
+            
+            setTimeout(() => {
+                
+
+encouragementToast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // 处理打卡
+        
+
+function handleCheckin() {
+            if (isCheckedIn) return;
+            
+            // 检查至少完成一项功课
+    
+
+        const practices = loadPracticesData();
+            const completedCount = practices.filter(p => 
+
+p.checked).length;
+            
+            if (completedCount === 0) {
+                alert("请至少完成一项功课再
+
+打卡");
+                return;
+            }
+            
+            // 更新状态
+            isCheckedIn = true;
+    
+
+        currentStreak++;
+            totalDays++;
+            todayParticipants++;
+            
+            // 更新
+
+显示
+            updateStatsDisplay();
+            updateCheckinButton();
+            
+            // 保存数据
+       
+
+     saveStatsData();
+            
+            // 添加动画效果
+            checkinBtn.classList.add('pulse');
+       
+
+     setTimeout(() => {
+                checkinBtn.classList.remove('pulse');
+            }, 500);
+            
+     
+
+       // 显示打卡成功消息
+            const messages = [
+                "今日共修完成！功德无量！",
+              
+
+  "精进不懈，道业早成！随喜赞叹！",
+                "共修圆满！愿您福慧双增！",
+                "修行路上，感恩有
+
+您同行！"
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  
+
+          alert(`打卡成功！${randomMessage}`);
+        }
+        
+        // 初始化
+        
+
+document.addEventListener('DOMContentLoaded', function() {
+            initDate();
+            initDharmaQuote();
+  
+
+          initPracticesList();
+            loadStatsData();
+            updateStatsDisplay();
+            
+
+updateCheckinButton();
+            
+            // 添加事件监听
+            checkinBtn.addEventListener('click', 
+
+handleCheckin);
+            
+            // 添加一些初始动画
+            const elements = 
+
+document.querySelectorAll('.fade-in');
+            elements.forEach((el, index) => {
+                
+
+el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
