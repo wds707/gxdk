@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -118,9 +118,8 @@
         
         .practice-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
+            padding: 12px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
@@ -128,36 +127,48 @@
             border-bottom: none;
         }
         
-        .practice-inputs {
-            display: flex;
-            flex: 1;
-            align-items: center;
-            gap: 10px;
-        }
-        
         .practice-name {
-            flex: 2;
+            flex: 2.5;
             padding: 10px 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             background-color: #fafafa;
+            min-width: 0;
+        }
+        
+        .practice-unit-group {
+            display: flex;
+            align-items: center;
+            flex: 1.5;
+            margin: 0 8px;
         }
         
         .practice-amount {
-            flex: 1;
-            padding: 10px 12px;
+            width: 50px;
+            padding: 10px 8px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 8px 0 0 8px;
             font-size: 1rem;
             background-color: #fafafa;
             text-align: center;
         }
         
+        .unit-text {
+            padding: 10px 8px;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+            background-color: #f9f9f9;
+            min-width: 40px;
+            text-align: center;
+        }
+        
         .practice-toggle {
             position: relative;
-            width: 60px;
-            height: 30px;
+            width: 50px;
+            height: 28px;
             flex-shrink: 0;
         }
         
@@ -182,8 +193,8 @@
         .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 22px;
-            width: 22px;
+            height: 20px;
+            width: 20px;
             left: 4px;
             bottom: 4px;
             background-color: white;
@@ -196,7 +207,7 @@
         }
         
         input:checked + .toggle-slider:before {
-            transform: translateX(30px);
+            transform: translateX(22px);
         }
         
         .checkin-button {
@@ -356,18 +367,41 @@
                 padding: 20px 15px;
             }
             
-            .practice-inputs {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
+            .practice-item {
+                flex-wrap: wrap;
             }
             
-            .practice-name, .practice-amount {
-                width: 100%;
+            .practice-name {
+                flex: 2.5;
+                font-size: 0.9rem;
+                padding: 8px 10px;
+                min-width: 120px;
+            }
+            
+            .practice-unit-group {
+                flex: 1.8;
+                margin: 0 5px;
+            }
+            
+            .practice-amount {
+                width: 40px;
+                padding: 8px 6px;
+                font-size: 0.9rem;
+            }
+            
+            .unit-text {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+                min-width: 35px;
             }
             
             .practice-toggle {
-                align-self: flex-end;
+                width: 45px;
+                height: 26px;
+            }
+            
+            input:checked + .toggle-slider:before {
+                transform: translateX(19px);
             }
         }
         
@@ -494,18 +528,18 @@
         let totalDays = 0;
         let todayParticipants = 0;
         
-        // 默认功课数据（10行）
+        // 默认功课数据（10行）- 数量已清零
         const defaultPractices = [
-            { name: "金刚经", amount: "3部", checked: false },
-            { name: "地藏经", amount: "1部", checked: false },
-            { name: "准提神咒", amount: "1080遍", checked: false },
-            { name: "念佛", amount: "1000声", checked: false },
-            { name: "静坐", amount: "20分钟", checked: false },
-            { name: "行善", amount: "3次", checked: false },
-            { name: "拜佛", amount: "108拜", checked: false },
-            { name: "诵咒", amount: "108遍", checked: false },
-            { name: "阅经", amount: "1卷", checked: false },
-            { name: "放生", amount: "1次", checked: false }
+            { name: "金刚经", amount: "", unit: "部", checked: false },
+            { name: "地藏经", amount: "", unit: "部", checked: false },
+            { name: "准提神咒", amount: "", unit: "遍", checked: false },
+            { name: "念佛", amount: "", unit: "声", checked: false },
+            { name: "静坐", amount: "", unit: "分钟", checked: false },
+            { name: "行善", amount: "", unit: "次", checked: false },
+            { name: "大礼拜", amount: "", unit: "拜", checked: false },
+            { name: "诵咒", amount: "", unit: "遍", checked: false },
+            { name: "阅经", amount: "", unit: "卷", checked: false },
+            { name: "放生", amount: "", unit: "次", checked: false }
         ];
         
         // 鼓励语库
@@ -572,7 +606,7 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
             const dateStr = now.toLocaleDateString('zh-CN', options);
             
-            // 农历模拟（实际项目中可使用农历库）
+            // 农历模拟
             const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'];
             const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
                               '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
@@ -604,16 +638,17 @@
             
             // 生成10个功课行
             for (let i = 0; i < 10; i++) {
-                const practice = practices[i] || { name: "", amount: "", checked: false };
+                const practice = practices[i] || { name: "", amount: "", unit: "", checked: false };
                 
                 const practiceItem = document.createElement('div');
                 practiceItem.className = 'practice-item fade-in';
                 practiceItem.style.animationDelay = `${i * 0.05}s`;
                 
                 practiceItem.innerHTML = `
-                    <div class="practice-inputs">
-                        <input type="text" class="practice-name" placeholder="功课名称" value="${practice.name}" data-index="${i}">
-                        <input type="text" class="practice-amount" placeholder="次数" value="${practice.amount}" data-index="${i}">
+                    <input type="text" class="practice-name" placeholder="功课名称" value="${practice.name}" data-index="${i}">
+                    <div class="practice-unit-group">
+                        <input type="text" class="practice-amount" placeholder="数" value="${practice.amount}" data-index="${i}">
+                        <div class="unit-text" data-index="${i}">${practice.unit}</div>
                     </div>
                     <label class="practice-toggle">
                         <input type="checkbox" class="practice-checkbox" ${practice.checked ? 'checked' : ''} data-index="${i}">
@@ -630,11 +665,17 @@
             const checkboxes = document.querySelectorAll('.practice-checkbox');
             
             nameInputs.forEach(input => {
-                input.addEventListener('input', savePracticesData);
+                input.addEventListener('input', function() {
+                    savePracticesData();
+                    updateStatsDisplay();
+                });
             });
             
             amountInputs.forEach(input => {
-                input.addEventListener('input', savePracticesData);
+                input.addEventListener('input', function() {
+                    savePracticesData();
+                    updateStatsDisplay();
+                });
             });
             
             checkboxes.forEach(checkbox => {
@@ -664,12 +705,14 @@
             const practices = [];
             const nameInputs = document.querySelectorAll('.practice-name');
             const amountInputs = document.querySelectorAll('.practice-amount');
+            const unitTexts = document.querySelectorAll('.unit-text');
             const checkboxes = document.querySelectorAll('.practice-checkbox');
             
             for (let i = 0; i < 10; i++) {
                 practices.push({
                     name: nameInputs[i]?.value || "",
                     amount: amountInputs[i]?.value || "",
+                    unit: unitTexts[i]?.textContent || "",
                     checked: checkboxes[i]?.checked || false
                 });
             }
@@ -687,44 +730,56 @@
                 const today = new Date().toDateString();
                 if (data.lastCheckinDate === today) {
                     isCheckedIn = data.isCheckedIn;
-                    currentStreak = data.currentStreak || 0;
-                    totalDays = data.totalDays || 0;
-                    todayParticipants = data.todayParticipants || Math.floor(Math.random() * 20) + 15;
+                    
+                    // 恢复复选框状态
+                    if (data.practices) {
+                        const checkboxes = document.querySelectorAll('.practice-checkbox');
+                        for (let i = 0; i < Math.min(10, data.practices.length); i++) {
+                            if (checkboxes[i]) {
+                                checkboxes[i].checked = data.practices[i].checked || false;
+                            }
+                        }
+                    }
                 } else {
                     // 新的一天，重置打卡状态
                     isCheckedIn = false;
                     
                     // 如果是连续打卡，增加连续天数
                     if (data.isCheckedIn) {
-                        currentStreak = (data.currentStreak || 0) + 1;
+                        data.currentStreak++;
                     } else {
-                        currentStreak = 0;
+                        data.currentStreak = 0;
                     }
-                    
-                    totalDays = data.totalDays || 0;
-                    todayParticipants = Math.floor(Math.random() * 20) + 15;
-                    
-                    // 保存新数据
-                    saveStatsData();
                 }
+                
+                currentStreak = data.currentStreak || 0;
+                totalDays = data.totalDays || 0;
+                todayParticipants = data.todayParticipants || Math.floor(Math.random() * 20) + 15;
+                
+                // 更新显示
+                updateStatsDisplay();
+                updateCheckinButton();
             } else {
                 // 初始数据
                 currentStreak = 0;
                 totalDays = 0;
                 todayParticipants = Math.floor(Math.random() * 20) + 15;
-                saveStatsData();
+                updateStatsDisplay();
             }
         }
         
-        // 保存统计数据到localStorage
-        function saveStatsData() {
+        // 保存数据到localStorage
+        function saveData() {
             const today = new Date().toDateString();
+            const practices = loadPracticesData();
+            
             const data = {
                 lastCheckinDate: today,
                 isCheckedIn: isCheckedIn,
                 currentStreak: currentStreak,
                 totalDays: totalDays,
-                todayParticipants: todayParticipants
+                todayParticipants: todayParticipants,
+                practices: practices
             };
             
             localStorage.setItem('buddhistStatsData', JSON.stringify(data));
@@ -794,7 +849,7 @@
             updateCheckinButton();
             
             // 保存数据
-            saveStatsData();
+            saveData();
             
             // 添加动画效果
             checkinBtn.classList.add('pulse');
@@ -817,10 +872,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             initDate();
             initDharmaQuote();
-            initPracticesList();
             loadStatsData();
-            updateStatsDisplay();
-            updateCheckinButton();
+            initPracticesList();
             
             // 添加事件监听
             checkinBtn.addEventListener('click', handleCheckin);
