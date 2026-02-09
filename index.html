@@ -83,6 +83,11 @@
             color: var(--accent-color);
         }
         
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
+        
         /* 打卡主区域 */
         .checkin-card {
             background-color: white;
@@ -152,6 +157,10 @@
             font-size: 1rem;
             background-color: #fafafa;
             text-align: center;
+        }
+        
+        .practice-amount:invalid {
+            border-color: #ff6b6b;
         }
         
         .unit-text {
@@ -235,6 +244,13 @@
         .checkin-button.checked {
             background: linear-gradient(to right, var(--success-color), #7cb342);
             color: white;
+        }
+        
+        .checkin-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         /* 进度统计 */
@@ -432,7 +448,7 @@
         <header class="header">
             <h1>明觉城·每日共修打卡</h1>
             <p>精进修行 日积月累 功不唐捐</p>
-            <div class="date-display" id="currentDate">2023年10月15日 星期六 农历九月初一</div>
+            <div class="date-display" id="currentDate">2026年2月8日 星期日</div>
         </header>
         
         <!-- 打卡主区域 -->
@@ -606,16 +622,7 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
             const dateStr = now.toLocaleDateString('zh-CN', options);
             
-            // 农历模拟
-            const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'];
-            const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
-                              '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
-                              '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
-            
-            const lunarMonth = lunarMonths[now.getMonth() % 12];
-            const lunarDay = lunarDays[now.getDate() % 30];
-            
-            currentDateEl.textContent = `${dateStr} 农历${lunarMonth}月${lunarDay}`;
+            currentDateEl.textContent = dateStr;
         }
         
         // 初始化今日法语
@@ -647,7 +654,7 @@
                 practiceItem.innerHTML = `
                     <input type="text" class="practice-name" placeholder="功课名称" value="${practice.name}" data-index="${i}">
                     <div class="practice-unit-group">
-                        <input type="text" class="practice-amount" placeholder="数" value="${practice.amount}" data-index="${i}">
+                        <input type="number" class="practice-amount" placeholder="数" value="${practice.amount}" data-index="${i}" min="1" step="1">
                         <div class="unit-text" data-index="${i}">${practice.unit}</div>
                     </div>
                     <label class="practice-toggle">
@@ -668,6 +675,7 @@
                 input.addEventListener('input', function() {
                     savePracticesData();
                     updateStatsDisplay();
+                    validateCheckinButton();
                 });
             });
             
@@ -675,13 +683,37 @@
                 input.addEventListener('input', function() {
                     savePracticesData();
                     updateStatsDisplay();
+                    validateCheckinButton();
+                    
+                    // 检查对应的打卡开关是否需要禁用
+                    const index = this.getAttribute('data-index');
+                    const checkbox = document.querySelector(`.practice-checkbox[data-index="${index}"]`);
+                    if (checkbox.checked && (!this.value || parseInt(this.value) < 1)) {
+                        checkbox.checked = false;
+                        savePracticesData();
+                        updateStatsDisplay();
+                        validateCheckinButton();
+                    }
                 });
             });
             
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
+                    const index = this.getAttribute('data-index');
+                    const amountInput = document.querySelector(`.practice-amount[data-index="${index}"]`);
+                    
+                    // 检查数量框是否有有效数字
+                    if (this.checked) {
+                        if (!amountInput.value || parseInt(amountInput.value) < 1) {
+                            this.checked = false;
+                            alert("请先填写完成数量，然后才能点亮打卡图标");
+                            return;
+                        }
+                    }
+                    
                     savePracticesData();
                     updateStatsDisplay();
+                    validateCheckinButton();
                     
                     // 如果是从未选中变为选中，显示鼓励语
                     if (this.checked) {
@@ -689,6 +721,35 @@
                     }
                 });
             });
+        }
+        
+        // 验证打卡按钮状态
+        function validateCheckinButton() {
+            const practices = loadPracticesData();
+            const completedCount = practices.filter(p => p.checked).length;
+            
+            // 检查是否有勾选的项目
+            if (completedCount === 0) {
+                checkinBtn.disabled = true;
+                return;
+            }
+            
+            // 检查勾选的项目是否有数量填写
+            const hasInvalidAmount = practices.some(p => {
+                if (p.checked) {
+                    // 如果勾选了但数量为空，则不允许打卡
+                    if (p.amount === "" || p.amount === null || p.amount === undefined) {
+                        return true;
+                    }
+                    // 如果数量不是有效数字
+                    if (isNaN(parseInt(p.amount)) || parseInt(p.amount) < 1) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            
+            checkinBtn.disabled = hasInvalidAmount;
         }
         
         // 从localStorage加载功课数据
@@ -728,8 +789,14 @@
                 
                 // 检查是否是同一天
                 const today = new Date().toDateString();
-                if (data.lastCheckinDate === today) {
+                const lastCheckinDate = data.lastCheckinDate;
+                
+                if (lastCheckinDate === today) {
+                    // 如果是同一天，恢复打卡状态
                     isCheckedIn = data.isCheckedIn;
+                    currentStreak = data.currentStreak || 0;
+                    totalDays = data.totalDays || 0;
+                    todayParticipants = data.todayParticipants || Math.floor(Math.random() * 20) + 15;
                     
                     // 恢复复选框状态
                     if (data.practices) {
@@ -744,27 +811,41 @@
                     // 新的一天，重置打卡状态
                     isCheckedIn = false;
                     
-                    // 如果是连续打卡，增加连续天数
-                    if (data.isCheckedIn) {
-                        data.currentStreak++;
+                    // 检查是否是连续的一天
+                    const lastDate = new Date(lastCheckinDate);
+                    const currentDate = new Date();
+                    const timeDiff = currentDate.getTime() - lastDate.getTime();
+                    const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+                    
+                    if (dayDiff === 1 && data.isCheckedIn) {
+                        // 如果昨天打卡了，连续打卡加1
+                        currentStreak = (data.currentStreak || 0) + 1;
+                    } else if (dayDiff > 1) {
+                        // 如果间隔超过一天，连续打卡清零
+                        currentStreak = 0;
                     } else {
-                        data.currentStreak = 0;
+                        // 其他情况保持原连续打卡
+                        currentStreak = data.currentStreak || 0;
                     }
+                    
+                    totalDays = data.totalDays || 0;
+                    todayParticipants = Math.floor(Math.random() * 20) + 15;
+                    
+                    // 保存新数据
+                    saveData();
                 }
-                
-                currentStreak = data.currentStreak || 0;
-                totalDays = data.totalDays || 0;
-                todayParticipants = data.todayParticipants || Math.floor(Math.random() * 20) + 15;
                 
                 // 更新显示
                 updateStatsDisplay();
                 updateCheckinButton();
+                validateCheckinButton();
             } else {
                 // 初始数据
                 currentStreak = 0;
                 totalDays = 0;
                 todayParticipants = Math.floor(Math.random() * 20) + 15;
                 updateStatsDisplay();
+                validateCheckinButton();
             }
         }
         
@@ -809,7 +890,6 @@
             } else {
                 checkinBtn.innerHTML = '<i class="fas fa-check-circle"></i> 完成今日共修';
                 checkinBtn.classList.remove('checked');
-                checkinBtn.disabled = false;
             }
         }
         
@@ -838,10 +918,55 @@
                 return;
             }
             
+            // 检查勾选的功课是否都有有效数量
+            const invalidPractices = practices.filter(p => {
+                if (p.checked) {
+                    return p.amount === "" || p.amount === null || p.amount === undefined || 
+                           isNaN(parseInt(p.amount)) || parseInt(p.amount) <= 0;
+                }
+                return false;
+            });
+            
+            if (invalidPractices.length > 0) {
+                alert("请为已完成的功课填写有效数量");
+                return;
+            }
+            
             // 更新状态
             isCheckedIn = true;
-            currentStreak++;
-            totalDays++;
+            
+            // 检查是否是今天第一次打卡
+            const today = new Date().toDateString();
+            const savedData = localStorage.getItem('buddhistStatsData');
+            let lastCheckinDate = "";
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                lastCheckinDate = data.lastCheckinDate;
+            }
+            
+            // 如果是新的一天，更新连续打卡和累计天数
+            if (lastCheckinDate !== today) {
+                // 检查昨天是否打卡
+                const lastDate = new Date(lastCheckinDate);
+                const currentDate = new Date();
+                const timeDiff = currentDate.getTime() - lastDate.getTime();
+                const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+                
+                if (dayDiff === 1) {
+                    // 昨天打卡了，连续打卡加1
+                    currentStreak++;
+                } else if (dayDiff > 1) {
+                    // 间隔超过一天，连续打卡重置为1
+                    currentStreak = 1;
+                } else {
+                    // 同一天或无效日期，连续打卡加0（不应该发生）
+                }
+                
+                // 累计天数加1
+                totalDays++;
+            }
+            
             todayParticipants++;
             
             // 更新显示
